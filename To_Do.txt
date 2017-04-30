@@ -2,12 +2,15 @@
   Procurar alguns padrões de palavraas no texto ex: v0ce vose são trocadas por você. Fazer com umas 3 palavras. Dificuldade 3
 2) Verificação de plural
   Procurar palavras terminadas com 's' e ver se a palavra seguinte possui terminação com ões, as, os etc. Dificuldade 4
-3) Colocar letras maiúsculas
+3) Colocar letras maiúsculas (Feito)
   Procurar nomes tabelados em um txt e trocar a primeira letra por Maiúsculo. Dificuldade 2
 4) Trocar palavras repetidas por sinônimos
    Opcões: fornecer a palavra repetida ou comparar cada palavra com o resto do texto. Dificuldade 1, 2
 5) Colocar ponto final
   procurar palavra sucedida de outra maiúscula que não seja nome. Dificuldade 3 tendo o programa 3 já pronto
 
-Módulo perl:
-Deve ter pelo menos a função 3, que ela é necessária para executar a função 5
+OBS:
+  1) Módulo perl:
+  Deve ter pelo menos a função 3, que ela é necessária para executar a função 5
+  
+  2) O terceiro programa nao coloca em maiusculo nomes compostos como Rio de Janeiro e Sao Paulo.
