@@ -12,5 +12,5 @@
 OBS:
   1) Módulo perl:
   Deve ter pelo menos a função 3, que ela é necessária para executar a função 5
-  
   2) O terceiro programa nao coloca em maiusculo nomes compostos como Rio de Janeiro e Sao Paulo.
+  3) Tem que ser feito o makefile
