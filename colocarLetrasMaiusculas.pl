@@ -6,4 +6,6 @@ use lib dirname(dirname abs_path $0);
 use ModuloCorretorOrtografico qw(:ALL);
 
 my $arq = "stdText.txt";
-ColocarLetrasMaiusculas($arq);
+my $outputArq = "textoCorrigido1.txt";
+
+ColocarLetrasMaiusculas($arq, $outputArq);
