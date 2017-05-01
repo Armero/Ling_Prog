@@ -7,8 +7,11 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION     = 1.00;
 @ISA         = qw(Exporter);
 @EXPORT      = ();
-@EXPORT_OK   = qw(CompararPalavras ColocarLetrasMaiusculas FiltrarPalavra VerificaPrimeiraLetra SubstituirPalavrasRepetidas);
-%EXPORT_TAGS = ( ALL => [qw(&CompararPalavras &ColocarLetrasMaiusculas &FiltrarPalavra &VerificaPrimeiraLetra &SubstituirPalavrasRepetidas)]);
+
+@EXPORT_OK   = qw(CompararPalavras ColocarLetrasMaiusculas FiltrarPalavra VerificarPrimeiraLetra SubstituirPalavrasRepetidas 
+                  ProcurarNomeNosDados ColocarPontoFinal);
+%EXPORT_TAGS = ( ALL => [qw(&CompararPalavras &ColocarLetrasMaiusculas &FiltrarPalavra &VerificarPrimeiraLetra &SubstituirPalavrasRepetidas
+                        &ProcurarNomeNosDados &ColocarPontoFinal)]);
 
 sub FiltrarPalavra
 {
@@ -38,6 +41,7 @@ sub ColocarLetrasMaiusculas
   my $palavraOriginal = "";
   my $achou = 0;
   my $ultimaLetra = "";
+  my $vez = 0;
 
   #abre o arquivo passado pelo usuario, o arquivo padrao com todos os nomes listados e o arquivo de saída
   open (my $conteudoArquivo, "<", $nomeArquivo) or die "Impossivel abrir o conteudo do arquivo: $!";
@@ -47,6 +51,10 @@ sub ColocarLetrasMaiusculas
   #le as palavras no texto passado para a funcao
   while (<$conteudoArquivo>)
   {
+    if ($vez > 0)
+    {
+      print $textoCorrigido "\n";
+    }
     #separa a linha em palavras
     @palavras = split;
     foreach (@palavras)
@@ -64,7 +72,7 @@ sub ColocarLetrasMaiusculas
         {
           #tira os pulas linhas dos nomes no arquivo padrao de nomes
           $nomeBase =~ s/\n//g;
-          $achou = CompararaPalavras ($nomeBase, $palavraFiltrada);
+          $achou = CompararPalavras ($nomeBase, $palavraFiltrada);
           if ($achou == 1)
           {
             $novaPalavra = ucfirst ($palavraFiltrada);
@@ -89,9 +97,7 @@ sub ColocarLetrasMaiusculas
       #retorna para o comeco do arquivo
       seek $textoBase, 0, 0;
     }
-    
-    #pula linha no arquivo de saida
-    print $textoCorrigido "\n";
+    $vez = $vez + 1;
   }
 
   #fecha os arquivos -> nao esquecer isto de forma alguma
@@ -100,7 +106,7 @@ sub ColocarLetrasMaiusculas
   close ($textoCorrigido);
 }
 
-sub VerificaPrimeiraLetra
+sub VerificarPrimeiraLetra
 { 
     if (/^[[:upper:]]/) 
     {
@@ -129,6 +135,7 @@ sub SubstituirPalavrasRepetidas
   my $palavraRepetida = $_[2];
   my $existe = 0;
   my $contadorDeLinhas = 0;
+  my $vez = 0;
 
   use File::Copy;
   copy($nomeArquivo, $arquivoSaida) or die "Impossivel copiar o arquivo: $!";
@@ -171,6 +178,10 @@ sub SubstituirPalavrasRepetidas
   while (<$conteudoArquivo>)
   {
     @palavras = split;
+    if ($vez > 0)
+    {
+      print $textoCorrigido "\n";
+    }
     foreach (@palavras)
     {
       $novaPalavra = $_;
@@ -197,12 +208,103 @@ sub SubstituirPalavrasRepetidas
       $achouSinonimo = 0;
       print $textoCorrigido "$novaPalavra ";
     }
-    print $textoCorrigido "\n";
+    $vez = $vez + 1;
   }
 
 
   #fecha os arquivos -> nao esquecer isto de forma alguma
   close ($conteudoArquivo);
   close ($textoBase);
+  close ($textoCorrigido);
+}
+
+#procura o nome passado no arquivo *.txt padrao do sistema
+sub ProcurarNomeNosDados 
+{
+  my $palavraFornecida = $_[0];
+  my $arquivoBase = "nomes.txt";
+  my $palavraBase = "";
+  my @palavras = [];
+  open (my $textoBase, "<", $arquivoBase) or die "Impossivel abrir o conteudo do arquivo: $!";
+
+  $palavraFornecida = lc $palavraFornecida;
+  while (<$textoBase>)
+  {
+    @palavras = split;
+    foreach (@palavras)
+    {
+      $palavraBase = $_;
+      $palavraBase =~ s/\n//g;
+
+      if (CompararPalavras($palavraFornecida, $palavraBase ) == 1)
+      {
+        close ($textoBase);
+        return 1;
+      }
+    }
+  }
+  close ($textoBase);
+  return 0; 
+}
+
+#Coloca ponto final em setencas onde a letra de uma palavra esta escrita em maiusculo e esta palavra nao eh um nome
+sub ColocarPontoFinal
+{
+  my $nomeArquivo = $_[0];
+  my $contador = 0;
+  my $arquivoSaida = $_[1];
+  my $novaPalavra = "";
+  my @palavras = [];
+  my $palavraAnterior = "";
+  my $vez = 0;
+
+  use File::Copy;
+  copy($nomeArquivo, $arquivoSaida) or die "Impossivel copiar o arquivo: $!";
+
+
+  #abre o arquivo passado pelo usuario, o arquivo padrao com todos os nomes listados e o arquivo de saída
+  open (my $conteudoArquivo, "<", $nomeArquivo) or die "Impossivel abrir o conteudo do arquivo: $!";
+  open (my $textoCorrigido, ">", $arquivoSaida) or die "Impossivel criar o arquivos";
+
+  while (<$conteudoArquivo>)
+  {
+    @palavras = split;
+    $contador = 0;
+    if ($vez > 0)
+    {
+      print $textoCorrigido "\n";
+    }
+
+    foreach (@palavras)
+    {
+      #Compara a palavra atual com a anterior. Caso a atual nao seja um nome conhecido e 
+      #tenha a sua primeira letra Maiuscula, coloca-se um ponto no final da palavra anterior
+      if ( ($contador > 0) && ($contador < scalar @palavras) )
+        {
+          $palavraAnterior = $novaPalavra;
+          $novaPalavra =~ s/\n//g;
+          $novaPalavra = $_;
+          if ( (substr ($palavraAnterior, -1) ne ".")
+            && (VerificarPrimeiraLetra ($novaPalavra) == 1) 
+            && (ProcurarNomeNosDados($novaPalavra) == 0) )
+          {
+            $palavraAnterior .= ".";
+          }
+          $contador = $contador + 1;
+          print $textoCorrigido "$palavraAnterior ";
+        }
+        elsif ($contador == 0)
+        {
+          $novaPalavra = $_;
+          $novaPalavra =~ s/\n//g;
+          $contador = $contador + 1;
+        }     
+    }
+    print $textoCorrigido "$novaPalavra.";
+    $vez = $vez + 1;
+  }
+
+  #fecha os arquivos -> nao esquecer isto de forma alguma
+  close ($conteudoArquivo);
   close ($textoCorrigido);
 }
