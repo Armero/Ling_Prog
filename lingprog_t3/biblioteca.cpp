@@ -1,7 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include "biblioteca.h" 
+#include "biblioteca.h"
 
 using namespace std;
 
@@ -15,7 +12,7 @@ void Biblioteca::adicionarTexto(string texto, int func)
   FILE *arquivo;
  
   
-  ifstream novoTexto (texto.c_str()); 
+  ifstream novoTexto (texto); 
   if (novoTexto.is_open())
   {
     
@@ -126,12 +123,54 @@ string line;
 
 }
 
+void exibirCorrigido(string texto)
+{
+
+string line,textoCompleto;
+int tamanho;
+
+  system("clear");
+ ifstream novoTexto (texto); 
+  if (novoTexto.is_open())
+  {
+    
+    while (! novoTexto.eof() ) 
+    {
+      
+      getline (novoTexto,line); 
+                            
+	  textoCompleto = textoCompleto + line + "\n";
+	 
+    }
+    novoTexto.close();
+    cout << textoCompleto << endl;
+ 
+  }
+    tamanho = textoCompleto.size();
+
+    cout << endl;
+    cout << "O texto tem " << tamanho << " caracters" << endl;
+
+
+
+}
+
 void Biblioteca::exibirErros(string texto)
 {
- string line,textoCompleto;
+  string line,textoCompleto,saida,palavra;
+  int tamanho,seletor;
+ bool valido = false;
+  int argc;
+  char **argv;
+  char **env;
+
+  PerlWrapper perl (&argc, &argv, &env);
+  perl.setArquivoEntrada(texto);
+  saida = "correcao_" + texto;
+  perl.setArquivoSaida(saida);
 
  system("clear");
- ifstream novoTexto (texto.c_str()); 
+ ifstream novoTexto (texto); 
   if (novoTexto.is_open())
   {
     
@@ -147,13 +186,65 @@ void Biblioteca::exibirErros(string texto)
     cout << textoCompleto << endl;
  
   }
-    cout << "Tecle enter para voltar" << endl;
-    getline(cin,line);
-	getline(cin,line);
-    
-  
+    tamanho = textoCompleto.size();
+
+    cout << endl;
+    cout << "O texto tem " << tamanho << " caracters" << endl;
+
+while (valido != true)
+{
+    cout << "Que tipo de correção deseja fazer?" << endl;
+    cout << "(1) Correção de plural" << endl;
+    cout << "(2) Correção de palavras" << endl;
+    cout << "(3) Correção de pontuação" << endl;
+    cout << "(4) Colocar sinonimos em repetição" << endl;
+    cout << "(5) Correção de letras maiusculas" << endl;
+    cout << "(6) Correção completa " << endl;
+    cout << "(8) Voltar ao Menu principal" << endl;
+    cin >> seletor;
+     
+    if(seletor > 0 && seletor < 9)
+   valido = true;
+     else
+     cout << "Resposta Inválida, tente novamente com uma das opções abaixo: " << endl;
+   
+ }
+
+   switch (seletor){
+    case 1: 
+    perl.CorrecaoDePlural ();
+    break;
+    case 2:
+    perl.CorrecaoDePalavras ();
+    break;
+    case 3:
+    perl.ColocarPontoFinal ();
+    break;
+    case 4:
+    cout << "Qual palavra repetida deseja alterar?" << endl;
+    cin >> palavra;
+    perl.SubstituirPalavrasRepetidas (palavra);
+    break;   
+    case 5:
+    perl.ColocarLetrasMaiusculas ();
+    case 6:
+    perl.CorrecaoCompleta ();
+    }
+
+  if(seletor == 8)
+  return;
+  cout << "Texto com a correção selecionada: " << endl;
+  exibirCorrigido(saida);
+
+  cout << "Aperte qualquer tecla para voltar ao menu principal" << endl;
+   getline(cin,line);
+   getline(cin,line);
+
 	return;
 }
+
+
+
 
 void Biblioteca::excluirTexto(string texto)
 {

@@ -1,8 +1,9 @@
 #include <iostream>
 #include <string>
-#include <iostream>
 #include <fstream>
 #include "biblioteca.h"
+#include <cstdlib>
+
 
 using namespace std; 
 
@@ -13,14 +14,14 @@ Biblioteca biblioteca(0);
 {
     int seletor;
     bool valido = false;
-	string line;
+  string line;
    system("clear"); 
 
  while (!valido){
   cout << "Selecione a opção desejada: " <<endl;
   cout << "(1) Adicionar texto a biblioteca" << endl;
   cout << "(2) Exibir textos contidos na biblioteca" << endl;
-  cout << "(3) Selecionar texto para exibir erros" << endl;
+  cout << "(3) Selecionar texto para exibir informações" << endl;
   cout << "(4) Excluir texto da biblioteca" << endl;
   cout << "(8) Sair" << endl;
   cin >> line;
@@ -29,7 +30,7 @@ Biblioteca biblioteca(0);
 
     }
     catch(int erro)
-     {	
+     {  
        cout << "Resposta Inválida, tente novamente com uma das opções abaixo: " << endl;
       }
    if(seletor > 0 && seletor < 9)
@@ -70,11 +71,11 @@ string line;
       getline (novoTexto,line); // como foi aberto em modo texto(padrão)
                              //e não binário(ios::bin) pega cada linha
 
-	if(line != "")
-	  biblioteca.adicionarTexto(line,0);
+  if(line != "")
+    biblioteca.adicionarTexto(line,0);
       
          
-	 
+   
     }
     novoTexto.close();
     
@@ -109,5 +110,3 @@ switch (seletor){
 
 }
 }
-
-
