@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <string>
+#include <fstream>
 #include "perlWrapper.h"
 
 using namespace std; 

@@ -1,3 +1,4 @@
+#include <fstream>
 #include "biblioteca.h"
 
 using namespace std;
@@ -29,8 +30,10 @@ void Biblioteca::adicionarTexto(string texto, int func)
     if(func == 1)
      {
      arquivo=fopen("listaDeTextos.txt","a");
-     fputs(textos[ultimo].c_str() ,arquivo);
-     textos[ultimo] = texto;	
+     textos[ultimo] = texto;
+     line = texto + "\n";
+     fputs(line.c_str() ,arquivo);
+     	
      fclose(arquivo);  
      ultimo = ultimo +1; 
      cout << textoCompleto;
@@ -69,8 +72,9 @@ void Biblioteca::adicionarTexto(string texto, int func)
      fputs(textoCompleto.c_str(),arquivo);
      fclose(arquivo);  
      arquivo=fopen("listaDeTextos.txt","a");
-     fputs(textos[ultimo].c_str() ,arquivo);
-     textos[ultimo] = textos[ultimo];
+     textos[ultimo] = texto;
+     line = texto + "\n";
+     fputs(line.c_str() ,arquivo);
 
      fclose(arquivo);  
      ultimo = ultimo +1; 
@@ -186,7 +190,7 @@ void Biblioteca::exibirErros(string texto)
     cout << textoCompleto << endl;
  
   }
-    tamanho = textoCompleto.size();
+    tamanho = textoCompleto.size() - 1;
 
     cout << endl;
     cout << "O texto tem " << tamanho << " caracters" << endl;
@@ -212,23 +216,59 @@ while (valido != true)
 
    switch (seletor){
     case 1: 
+    try{ 
     perl.CorrecaoDePlural ();
+    }
+    catch (ExcecaoTamanhoPalavra e)
+    {
+    	cout << e.what();
+   }
     break;
     case 2:
+    try {
     perl.CorrecaoDePalavras ();
+    }
+    catch (ExcecaoTamanhoPalavra e)
+    {
+    	cout << e.what();
+    }
     break;
     case 3:
+    try {
     perl.ColocarPontoFinal ();
+    }
+    catch (ExcecaoTamanhoPalavra e)
+    {
+    	cout << e.what();
+    }
     break;
     case 4:
     cout << "Qual palavra repetida deseja alterar?" << endl;
     cin >> palavra;
+    try{
     perl.SubstituirPalavrasRepetidas (palavra);
+    }
+    catch (ExcecaoTamanhoPalavra e)
+    {
+    	cout << e.what();
+   }
     break;   
     case 5:
+    try{
     perl.ColocarLetrasMaiusculas ();
+    }
+    catch (ExcecaoTamanhoPalavra e)
+    {
+    	cout << e.what();
+   }
     case 6:
+   try {
     perl.CorrecaoCompleta ();
+        }
+    catch (ExcecaoTamanhoPalavra e)
+    {
+    	cout << e.what();
+   }
     }
 
   if(seletor == 8)
