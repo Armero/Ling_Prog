@@ -15,7 +15,7 @@ void Biblioteca::adicionarTexto(string texto, int func)
   FILE *arquivo;
  
   
-  ifstream novoTexto (texto); 
+  ifstream novoTexto (texto.c_str()); 
   if (novoTexto.is_open())
   {
     
@@ -131,7 +131,7 @@ void Biblioteca::exibirErros(string texto)
  string line,textoCompleto;
 
  system("clear");
- ifstream novoTexto (texto); 
+ ifstream novoTexto (texto.c_str()); 
   if (novoTexto.is_open())
   {
     

@@ -1,7 +1,6 @@
-
-
 #include <iostream>
 #include <string>
+#include <iostream>
 #include <fstream>
 #include "biblioteca.h"
 
@@ -60,7 +59,7 @@ Biblioteca biblioteca(0);
 {
 string texto = "listaDeTextos.txt";
 
-ifstream novoTexto (texto); 
+ifstream novoTexto (texto.c_str()); 
 string line;
   if (novoTexto.is_open())
   {

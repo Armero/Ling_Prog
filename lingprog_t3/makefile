@@ -14,15 +14,25 @@ CPERL2C = cperl2.cpp
 WRAPPERC = perlWrapper.cpp
 CPERL2EXE = cperl2
 CPERL2OBJS = cperl2.o perlWrapper.o
+PROGRAMA_PRINCIPALC = Programa_Principal.cpp 
+BIBLIOTECAC = biblioteca.cpp
+TRABALHO03OBJS = Programa_Principal.o biblioteca.o
+TRABALHO03EXEC = Programa_Principal
 
 EXECS = $(CPERLEXE)\
-				$(CPERL2EXE)
+				$(CPERL2EXE)\
+				$(TRABALHO03EXEC)
 
 OBJS = $(CPERLOBJS)\
-			 $(CPERL2OBJS)
+			 $(CPERL2OBJS)\
+			 $(TRABALHO03OBJS)
 
 all: $(ALL)
 
+Trabalho03: $(TRABALHO03OBJS)
+	$(CC)	$(CCFLAGS)	-c 	$(PROGRAMA_PRINCIPALC)	
+	$(CC)	$(CCFLAGS)	-c 	$(BIBLIOTECAC)
+	$(LD) $(LFLAGS)	-o 	$@ 	$(TRABALHO03OBJS)
 
 cperl2:
 	$(CC)	$(CCFLAGS)	-c 	$(WRAPPERC)	
