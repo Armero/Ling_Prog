@@ -154,9 +154,6 @@ int tamanho;
     cout << textoCompleto << endl;
     cout << endl;
     cout << "O texto tem " << tamanho << " caracters" << endl;
-
-
-
 }
 
 void Biblioteca::exibirErros(string texto)

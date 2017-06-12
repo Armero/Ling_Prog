@@ -26,8 +26,8 @@ void PerlWrapper::setArquivoEntrada (const string nomeArquivo)
 	if (arquivoEntrada.is_open())
 		arquivoEntrada.close ();
 	
-
-	if (nomeArquivo.length() > MAX_TAMANHO_PALAVRA)
+	cout << "tamanho: " << nomeArquivo.length();
+	if (nomeArquivo.length() > MAX_TAMANHO_ARQUIVO)
 	{
 		throw ExcecaoTamanhoPalavra();
 	}
@@ -46,10 +46,9 @@ void PerlWrapper::setArquivoSaida (const string nomeArquivo)
 	if (arquivoSaida.is_open())
 		arquivoSaida.close();
 
-	if (nomeArquivo.length() > MAX_TAMANHO_PALAVRA)
-	{
+	if (nomeArquivo.length() > MAX_TAMANHO_ARQUIVO)
 		throw ExcecaoTamanhoPalavra();
-	}
+
 	arquivoSaida.open(nomeArquivo.c_str());	
 	nomeSaida = nomeArquivo;
 }
@@ -81,26 +80,29 @@ void PerlWrapper::ColocarPontoFinal ()
 }
 
 void PerlWrapper::SubstituirPalavrasRepetidas (string palavraExterna)
-{
-	char *my_argv[] = {(char *)"", (char *) "perlMain.pl"};
+
+{	char *my_argv[] = {(char *)"", (char *) "perlMain.pl"};
 	perl_parse(my_perl, NULL, 0, my_argv, (char **)NULL);
 	perl_run(my_perl);
 	char palavra[MAX_TAMANHO_PALAVRA];
 
 	if (palavraExterna == "")
 	{
-			cout << "Digite a Palavra Repetida" <<endl;
-			cin >> palavra;
+		cout << "Digite a Palavra Repetida" <<endl;
+		cin >> palavra;
+
+		if (strlen(palavra) > MAX_TAMANHO_PALAVRA)
+			throw ExcecaoTamanhoPalavra();
+
 	}
 	else
 	{
+		if (strlen(palavraExterna.c_str()) > MAX_TAMANHO_PALAVRA)
+			throw ExcecaoTamanhoPalavra();
+
 		strcpy(palavra, palavraExterna.c_str());
 	}
 
-	if (strlen(palavra) > MAX_TAMANHO_PALAVRA)
-	{
-		throw ExcecaoTamanhoPalavra();
-	}
 
 	dSP;
 	ENTER;

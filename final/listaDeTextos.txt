@@ -1,1 +1,2 @@
-e1.txt
+entradaPadrao1.txt
+entradaPadrao1.txt

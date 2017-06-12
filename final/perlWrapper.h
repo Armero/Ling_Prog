@@ -65,15 +65,15 @@ class PerlWrapper
 	private:
 		//Funcao auxiliar que so sera utilizada dentro da classe
 		//copia o arquivo de entrada para o arquivo padrao
-		void copiarArquivo (const char *, const char *);
+		void 			copiarArquivo (const char *, const char *);
 		ifstream 	arquivoEntrada;
 		ofstream 	arquivoSaida;
 		string		nomeEntrada;
 		string 		nomeSaida;
 
 		// Tamanho maximo de uma palavra repetida que pode ser tratada
-		static const unsigned MAX_TAMANHO_PALAVRA = 20;
-		static const unsigned MAX_TAMANHO_ARQUIVO = 100;
+		static const unsigned MAX_TAMANHO_PALAVRA = 100; //para adicionar correcao_
+		static const unsigned MAX_TAMANHO_ARQUIVO = 100 + 9;
 };
 
 #endif
